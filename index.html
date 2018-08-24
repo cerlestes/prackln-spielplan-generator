@@ -1,0 +1,461 @@
+<!doctype html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Prackln Turnierplan Generator</title>
+</head>
+<body>
+
+	<div id="vue">
+		<div class="sheet-a4" v-for="(team,i) in teams">
+			<header>
+				<h3>
+					{{ team }}
+					<span class="teamnumber">#{{ 1 + i }}</span>
+				</h3>
+				<h1>
+					Prackln Turnier {{ year }} in {{ location }}
+				</h1>
+
+				<table class="playernames">
+					<tr>
+						<td>Spieler 1: ______________________________</td>
+						<td>Spieler 2: ______________________________</td>
+					</tr>
+					<tr>
+						<td>Spieler 3: ______________________________</td>
+						<td>Spieler 4: ______________________________</td>
+					</tr>
+				</table>
+			</header>
+			<main>
+
+				<table class="table-root">
+					<thead>
+						<tr>
+							<th width="10%">
+								Gegner
+							</th>
+							<th>
+								<table>
+									<tr>
+										<td width="4%">
+											&nbsp;
+										</td>
+										<td v-for="t in throws">
+
+											Wurf #{{ t }}
+
+										</td>
+									</tr>
+								</table>
+							</th>
+							<th width="10%">
+								<span>Punkte</span>
+								<span>Zähler</span>
+							</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr v-for="r in rounds">
+							<td class="teamname">
+								#{{ 1 + getEnemyTeam(i, r) }}
+								<template v-if="">
+									<br /> <small>{{ teams[getEnemyTeam(i, r)] }}</small>
+								</template>
+							</td>
+							<td class="throws">
+								<table>
+									<tr>
+										<td width="4%">
+
+											<template v-if="useModernDesign">
+												<table class="explanation">
+													<tr>
+														<td>Nähe:</td>
+													</tr>
+													<tr>
+														<td>Holz:</td>
+													</tr>
+												</table>
+											</template>
+											<template v-else>
+												&nbsp;
+											</template>
+
+										</td>
+										<td v-for="n in throws">
+
+											<template v-if="useModernDesign">
+												<table>
+													<tr class="nears">
+														<td>1</td>
+														<td>2</td>
+														<td>3</td>
+														<td>4</td>
+													</tr>
+													<tr class="woods">
+														<td>3</td>
+														<td>6</td>
+														<td>9</td>
+														<td>12</td>
+													</tr>
+												</table>
+											</template>
+											<template v-else>
+												<table>
+													<tr class="combined">
+														<td>Selbst</td>
+														<td>Gegner</td>
+													</tr>
+												</table>
+
+											</template>
+
+										</td>
+									</tr>
+								</table>
+							</td>
+							<td class="scores">
+								<table>
+									<tr>
+										<td></td>
+										<td></td>
+									</tr>
+								</table>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+
+			</main>
+			<!--
+			<footer>
+
+				<table>
+					<tr>
+						<td>
+
+							<h5>Spielregeln</h5>
+
+							<ul>
+								<li>
+									Spielfeld: Die zwei Hölzer stehen 15-18m voneinander entfernt. Wer nicht so weit werfen kann darf in Absprache mit den Gegnern ein paar Meter vortreten. Die Spieler werfen ihre Prackeln einer nach dem anderen, bis alle geworfen haben.
+								</li>
+								<li>
+									Anwurf: Pro Wurfrichtung wirft abwechselnd entweder das eine oder das andere Team an. Beide Team-Kapitäne werfen ihre Prackl und begeben sich zum anderen Holz, wo gemessen wird, welches Team die erste Nähe hat.
+								</li>
+								<li>
+									Nähe: Als Nähe bezeichnet man die Prackln des eigenen Teams, näher am Holz liegen, als die erste gegnerische Prackl. Sobald ein Team die Nähe hat muss das gegnerische Team werfen, bis dieses die Nähe erringt oder keine Prackln mehr hat. Pro Prackl in der Nähe werden 3 Rundenpunkte angerechnet.
+								</li>
+								<li>
+									Holz: Wird das Holz durch die Prackl berührt und zum Fall gebracht, so werden dem Team 6 Rundenpunkte angerechnet. Das Holz wird sofort in Richtung seines Ursprungsortes gekippt aufgestellt und nach dem Ende der Runde wieder dorthin zurückgebracht und befestigt.
+								</li>
+							</ul>
+
+						</td>
+						<td width="33%">
+
+							<table class="table-results">
+								<tr>
+									<td>Rundenpunkte</td>
+									<td></td>
+								</tr>
+								<tr>
+									<td>Spielpunkte</td>
+									<td></td>
+								</tr>
+								<tr>
+									<td>Rang im Turnier</td>
+									<td></td>
+								</tr>
+							</table>
+
+						</td>
+					</tr>
+				</table>
+
+			</footer>
+			-->
+		</div>
+	</div>
+
+	<script src="vue.js"></script>
+	<script>
+
+		const turnier = new Vue({
+
+			el: '#vue',
+
+			data: {
+				year: null,
+				location: null,
+				throws: null,
+				teams: null,
+				useModernDesign: false,
+			},
+
+			computed: {
+				rounds: function(){ return (-1 + this.teams.length); },
+			},
+
+			methods: {
+
+				getDefaultTeamName(i) {
+					return 'Team ' + i;
+				},
+
+				getEnemyTeam(team, round) {
+					return (round < team+1) ? round-1 : round;
+				},
+
+				promptForYear() {
+					let msg = prompt('Aktuelles Jahr eingeben', String(new Date().getFullYear())).trim();
+
+					if (/^\d{2}$/.test(msg))
+						msg = '20' + msg;
+
+					if (/^\d{4}$/.test(msg) === false) {
+						alert('Das Jahr muss eine vierstellige Zahl sein!');
+						return promptForYear();
+					}
+
+					return msg;
+				},
+
+				promptForLocation() {
+					let msg = prompt('Ort des Turniers eingeben', '').trim();
+
+					if (msg.length < 2) {
+						alert('Die Eingabe muss mindestens zwei Zeichen lang sein!');
+						return promptForTeamName(def);
+					}
+
+					return msg;
+				},
+
+				promptForThrows() {
+					let msg = prompt('Anzahl an Würfen pro Partie eingeben (5 Hin + 5 Rück = Eingabe 10)', '10').trim();
+					let int = parseInt(msg, 10);
+
+					if (int < 5 || int > 12) {
+						alert('Die Wurfzahl muss zwischen 5 und 12 liegen!');
+						return promptForThrows();
+					}
+
+					return int;
+				},
+
+				promptForTeamCount() {
+					let msg = prompt('Anzahl der Teams eingeben', '10').trim();
+					let int = parseInt(msg, 10);
+
+					if (int < 2 || int > 12) {
+						alert('Die Teamanzahl muss zwischen 2 und 12 liegen!');
+						return promptForTeamCount();
+					}
+
+					return int;
+				},
+
+				promptForNoTeamNames() {
+					return confirm('Soll Eingabe der Team-Namen übersprungen werden werden? Nein/Abbrechen, um jetzt Team-Namen einzugeben.');
+				},
+
+				promptForTeamName(def = 'Team') {
+					let msg = prompt('Namen für Team eingeben', def).trim();
+
+					if (msg.length < 4) {
+						alert('Die Eingabe muss mindestens vier Zeichen lang sein!');
+						return promptForTeamName(def);
+					}
+
+					return msg;
+				},
+
+				promptForTeamCountAndNames() {
+					let teams = [];
+					let count = this.promptForTeamCount();
+					let noname = this.promptForNoTeamNames();
+
+					for (let i = 1; i <= count; i++)
+						teams.push( noname ? '' : this.promptForTeamName(this.getDefaultTeamName(i)) );
+
+					return teams;
+				},
+
+			},
+
+			mounted() {
+				this.year = this.promptForYear();
+				this.location = this.promptForLocation();
+				this.throws = this.promptForThrows();
+				this.teams = this.promptForTeamCountAndNames();
+			},
+
+		});
+
+	</script>
+
+	<style>
+
+		html, body {
+			display: block;
+			margin: 0;
+			padding: 0;
+			background-color: gray;
+		}
+
+		table {
+			width: 100%;
+			border-spacing: 0;
+			border-collapse: collapse;
+		}
+
+		td {
+			padding: 0;
+		}
+
+		h1, h3 {
+			margin: 0;
+		}
+
+		* {
+			margin-top: 0;
+		}
+
+		.sheet-a4 {
+			display: block;
+			position: relative;
+			box-sizing: border-box;
+			width: 297mm;
+			height: 208mm;
+			padding: 12mm 16mm;
+			background-color: white;
+
+			font-family: sans-serif;
+			font-size: 10pt;
+			font-weight: 500;
+		}
+
+		.sheet-a4 + .sheet-a4::before {
+			content: "";
+			display: block;
+			position: absolute;
+			top: 0;
+			left: 0;
+			width: 100%;
+			height: 1mm;
+			background-color: #eee;
+		}
+
+		.playernames {
+			margin-bottom: 6mm;
+			width: 66%;
+		}
+
+		.playernames td {
+			height: 8mm;
+			vertical-align: bottom;
+		}
+
+		.table-root > tbody > tr:nth-child(odd) {
+			background-color: #eee;
+		}
+
+		.table-root > tbody > tr > td {
+			padding: 0.5mm 0;
+		}
+
+		header > h3 {
+			float: right;
+			font-weight: normal;
+			font-size: 2em;
+		}
+		header > h3 > .teamnumber {
+			display: inline-block;
+			margin-left: 4mm;
+			padding: 1mm 2mm;
+			line-height: 1;
+			vertical-align: sub;
+
+			border: 1mm solid #666;
+			border-radius: 20% 10%;
+			font-size: 2em;
+			font-weight: bold;
+		}
+
+		.explanation td {
+			padding-right: 2mm;
+			height: 5mm;
+
+			font-size: 0.6em;
+			text-align: right;
+			vertical-align: middle;
+		}
+
+		.combined td {
+			width: 50%;
+			height: 30pt;
+
+			border: 0.5mm solid #666;
+			border-right: none;
+			color: rgba(0,0,0, 0.33);
+			font-size: 5pt;
+			line-height: 10pt;
+			text-align: center;
+			vertical-align: bottom;
+		}
+
+		.nears td,
+		.woods td,
+		.players td {
+			width: 25%;
+			height: 5mm;
+
+			border: 0.5mm solid #666;
+			font-size: 0.5em;
+			text-align: center;
+		}
+
+		.scores td {
+			width: 50%;
+			height: 12mm;
+
+			border: 1mm solid #666;
+		}
+		.scores td:last-child {
+			border-top-right-radius: 2mm;
+			border-bottom-right-radius: 2mm;
+		}
+
+		.counter,
+		.teamname {
+			padding: 2mm 0;
+			text-align: center;
+			font-size: 2em;
+			font-weight: bold;
+		}
+
+		.teamname small {
+			display: block;
+			margin-top: -0.5mm;
+			font-size: 0.4em;
+		}
+
+		.throws > table > tbody > tr > td:nth-child(odd):not(:first-of-type) {
+			background-color: #ddd;
+		}
+
+		@media print {
+			@page {
+				size: A4 landscape;
+				margin: 0;
+				padding: 0;
+			}
+		}
+
+	</style>
+
+</body>
+</html>
