@@ -14,17 +14,17 @@
 					<span class="teamnumber">#{{ 1 + i }}</span>
 				</h3>
 				<h1>
-					Prackln Turnier {{ year }} in {{ location }}
+					Prackl-Turnier {{ year }} in {{ location }}
 				</h1>
 
 				<table class="playernames">
 					<tr>
-						<td>Spieler 1: ______________________________</td>
-						<td>Spieler 2: ______________________________</td>
+						<td>Spieler 1: ___________________ &nbsp; Holz: ________</td>
+						<td>Spieler 2: ___________________ &nbsp; Holz: ________</td>
 					</tr>
 					<tr>
-						<td>Spieler 3: ______________________________</td>
-						<td>Spieler 4: ______________________________</td>
+						<td>Spieler 3: ___________________ &nbsp; Holz: ________</td>
+						<td>Spieler 4: ___________________ &nbsp; Holz: ________</td>
 					</tr>
 				</table>
 			</header>
@@ -43,26 +43,28 @@
 											&nbsp;
 										</td>
 										<td v-for="t in throws">
-
 											Wurf #{{ t }}
-
 										</td>
 									</tr>
 								</table>
 							</th>
 							<th width="10%">
-								<span>Punkte</span>
-								<span>Zähler</span>
+								<span>Spielergebnis</span>
 							</th>
 						</tr>
 					</thead>
 					<tbody>
 						<tr v-for="r in rounds">
 							<td class="teamname">
-								#{{ 1 + getEnemyTeam(i, r) }}
-								<template v-if="">
+
+								<template v-if="showEnemyTeamPlaceholder">
+									<span class="teamnumber">#&nbsp;&nbsp;&nbsp;</span>
+								</template>
+								<template v-else>
+									#{{ 1 + getEnemyTeam(i, r) }}
 									<br /> <small>{{ teams[getEnemyTeam(i, r)] }}</small>
 								</template>
+
 							</td>
 							<td class="throws">
 								<table>
@@ -109,7 +111,6 @@
 														<td>Gegner</td>
 													</tr>
 												</table>
-
 											</template>
 
 										</td>
@@ -118,9 +119,9 @@
 							</td>
 							<td class="scores">
 								<table>
-									<tr>
-										<td></td>
-										<td></td>
+									<tr class="combined">
+										<td>Selbst</td>
+										<td>Gegner</td>
 									</tr>
 								</table>
 							</td>
@@ -129,10 +130,17 @@
 				</table>
 
 			</main>
-			<!--
+
 			<footer>
 
-				<table>
+				<aside class="teamlist" v-if="haveTeamNames">
+					Die Teams des heutigen Turniers: <br />
+					<nobr v-for="(team,i) in teams" :key="i">
+						<b>#{{ i+1 }}</b> {{ team }}
+					</nobr>
+				</aside>
+
+				<!-- <table>
 					<tr>
 						<td>
 
@@ -173,10 +181,10 @@
 
 						</td>
 					</tr>
-				</table>
+				</table> -->
 
 			</footer>
-			-->
+
 		</div>
 	</div>
 
@@ -193,10 +201,12 @@
 				throws: null,
 				teams: null,
 				useModernDesign: false,
+				showEnemyTeamPlaceholder: true,
 			},
 
 			computed: {
 				rounds: function(){ return (-1 + this.teams.length); },
+				haveTeamNames: function() { return this.teams.reduce((acc,team) => (acc && Boolean(team)), true); },
 			},
 
 			methods: {
@@ -228,7 +238,7 @@
 
 					if (msg.length < 2) {
 						alert('Die Eingabe muss mindestens zwei Zeichen lang sein!');
-						return promptForTeamName(def);
+						return promptForLocation();
 					}
 
 					return msg;
@@ -262,12 +272,12 @@
 					return confirm('Soll Eingabe der Team-Namen übersprungen werden werden? Nein/Abbrechen, um jetzt Team-Namen einzugeben.');
 				},
 
-				promptForTeamName(def = 'Team') {
-					let msg = prompt('Namen für Team eingeben', def).trim();
+				promptForTeamName(placeholder = 'Team') {
+					let msg = prompt('Namen für Team eingeben', placeholder).trim();
 
 					if (msg.length < 4) {
 						alert('Die Eingabe muss mindestens vier Zeichen lang sein!');
-						return promptForTeamName(def);
+						return promptForTeamName(placeholder);
 					}
 
 					return msg;
@@ -330,7 +340,7 @@
 			box-sizing: border-box;
 			width: 297mm;
 			height: 208mm;
-			padding: 12mm 16mm;
+			padding: 10mm 14mm;
 			background-color: white;
 
 			font-family: sans-serif;
@@ -360,7 +370,7 @@
 		}
 
 		.table-root > tbody > tr:nth-child(odd) {
-			background-color: #eee;
+			background-color: #f8f8f8;
 		}
 
 		.table-root > tbody > tr > td {
@@ -373,16 +383,10 @@
 			font-size: 2em;
 		}
 		header > h3 > .teamnumber {
-			display: inline-block;
 			margin-left: 4mm;
-			padding: 1mm 2mm;
-			line-height: 1;
 			vertical-align: sub;
-
-			border: 1mm solid #666;
-			border-radius: 20% 10%;
 			font-size: 2em;
-			font-weight: bold;
+			line-height: 1;
 		}
 
 		.explanation td {
@@ -399,12 +403,14 @@
 			height: 30pt;
 
 			border: 0.5mm solid #666;
-			border-right: none;
 			color: rgba(0,0,0, 0.33);
 			font-size: 5pt;
 			line-height: 10pt;
 			text-align: center;
 			vertical-align: bottom;
+		}
+		.combined td + td {
+			background-color: #ddd;
 		}
 
 		.nears td,
@@ -443,8 +449,30 @@
 			font-size: 0.4em;
 		}
 
-		.throws > table > tbody > tr > td:nth-child(odd):not(:first-of-type) {
-			background-color: #ddd;
+		.teamname .teamnumber {
+			color: #666;
+		}
+
+		.teamnumber {
+			display: inline-block;
+			padding: 0.1em 0.2em;
+			font-size: 1.2em;
+			line-height: 1;
+
+			border: 0.08em solid #666;
+			border-radius: 0.3em 0.1em;
+			font-weight: bold;
+		}
+
+		.teamlist {
+			margin-top: 4mm;
+			margin-right: 25%;
+			line-height: 1.5;
+		}
+		.teamlist > nobr {
+			display: inline-block;
+			font-size: 1.2em;
+			margin-right: 5mm;
 		}
 
 		@media print {
