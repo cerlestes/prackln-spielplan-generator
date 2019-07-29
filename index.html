@@ -11,7 +11,12 @@
 			<header>
 				<h3>
 					{{ team }}
-					<span class="teamnumber">#{{ 1 + i }}</span>
+					<span class="teamnumber" v-if="i < 9">
+						&nbsp;{{ i+1 }}&nbsp;
+					</span>
+					<span class="teamnumber" v-else>
+						{{ i+1 }}
+					</span>
 				</h3>
 				<h1>
 					Prackl-Turnier {{ year }} in {{ location }}
@@ -19,12 +24,12 @@
 
 				<table class="playernames">
 					<tr>
-						<td>Spieler 1: ___________________ &nbsp; Holz: ________</td>
-						<td>Spieler 2: ___________________ &nbsp; Holz: ________</td>
+						<td>1. Spieler: <span class="input">___________________</span> &nbsp; Holz: <span class="input">________</span></td>
+						<td>2. Spieler: <span class="input">___________________</span> &nbsp; Holz: <span class="input">________</span></td>
 					</tr>
 					<tr>
-						<td>Spieler 3: ___________________ &nbsp; Holz: ________</td>
-						<td>Spieler 4: ___________________ &nbsp; Holz: ________</td>
+						<td>3. Spieler: <span class="input">___________________</span> &nbsp; Holz: <span class="input">________</span></td>
+						<td>4. Spieler: <span class="input">___________________</span> &nbsp; Holz: <span class="input">________</span></td>
 					</tr>
 				</table>
 			</header>
@@ -49,7 +54,7 @@
 								</table>
 							</th>
 							<th width="10%">
-								<span>Spielergebnis</span>
+								<span><big>SUMME</big></span>
 							</th>
 						</tr>
 					</thead>
@@ -58,10 +63,10 @@
 							<td class="teamname">
 
 								<template v-if="showEnemyTeamPlaceholder">
-									<span class="teamnumber">#&nbsp;&nbsp;&nbsp;</span>
+									<span class="teamnumber">&nbsp;&nbsp;&nbsp;&nbsp;</span>
 								</template>
 								<template v-else>
-									#{{ 1 + getEnemyTeam(i, r) }}
+									{{ 1 + getEnemyTeam(i, r) }}
 									<br /> <small>{{ teams[getEnemyTeam(i, r)] }}</small>
 								</template>
 
@@ -107,7 +112,7 @@
 											<template v-else>
 												<table>
 													<tr class="combined">
-														<td>Selbst</td>
+														<td>&nbsp;</td>
 														<td>Gegner</td>
 													</tr>
 												</table>
@@ -120,7 +125,7 @@
 							<td class="scores">
 								<table>
 									<tr class="combined">
-										<td>Selbst</td>
+										<td>&nbsp;</td>
 										<td>Gegner</td>
 									</tr>
 								</table>
@@ -134,9 +139,14 @@
 			<footer>
 
 				<aside class="teamlist" v-if="haveTeamNames">
-					Die Teams des heutigen Turniers: <br />
 					<nobr v-for="(team,i) in teams" :key="i">
-						<b>#{{ i+1 }}</b> {{ team }}
+						<span class="teamnumber" v-if="i < 9">
+							&nbsp;{{ i+1 }}&nbsp;
+						</span>
+						<span class="teamnumber" v-else>
+							{{ i+1 }}
+						</span>
+						{{ team }}
 					</nobr>
 				</aside>
 
@@ -260,8 +270,8 @@
 					let msg = prompt('Anzahl der Teams eingeben', '10').trim();
 					let int = parseInt(msg, 10);
 
-					if (int < 2 || int > 12) {
-						alert('Die Teamanzahl muss zwischen 2 und 12 liegen!');
+					if (int < 2 || int > 10) {
+						alert('Die Teamanzahl muss zwischen 2 und 10 liegen!');
 						return promptForTeamCount();
 					}
 
@@ -330,6 +340,10 @@
 			margin: 0;
 		}
 
+		h1 {
+			font-size: 1.5em;
+		}
+
 		* {
 			margin-top: 0;
 		}
@@ -380,7 +394,7 @@
 		header > h3 {
 			float: right;
 			font-weight: normal;
-			font-size: 2em;
+			font-size: 1.8em;
 		}
 		header > h3 > .teamnumber {
 			margin-left: 4mm;
@@ -435,6 +449,10 @@
 			border-bottom-right-radius: 2mm;
 		}
 
+		.input {
+			color: #BBB;
+		}
+
 		.counter,
 		.teamname {
 			padding: 2mm 0;
@@ -459,6 +477,7 @@
 			font-size: 1.2em;
 			line-height: 1;
 
+			background: #fff;
 			border: 0.08em solid #666;
 			border-radius: 0.3em 0.1em;
 			font-weight: bold;
@@ -466,13 +485,16 @@
 
 		.teamlist {
 			margin-top: 4mm;
-			margin-right: 25%;
-			line-height: 1.5;
+			padding: 2mm;
+			border: 0.16em dashed #CCC;
+			line-height: 2;
+			background: #f8f8f8;
 		}
 		.teamlist > nobr {
 			display: inline-block;
-			font-size: 1.2em;
-			margin-right: 5mm;
+			margin-right: 3%;
+			width: 17%;
+			text-align: center;
 		}
 
 		@media print {
