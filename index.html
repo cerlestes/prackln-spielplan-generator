@@ -24,12 +24,26 @@
 
 				<table class="playernames">
 					<tr>
-						<td>1. Spieler: <span class="input">___________________</span> &nbsp; Holz: <span class="input">________</span></td>
-						<td>2. Spieler: <span class="input">___________________</span> &nbsp; Holz: <span class="input">________</span></td>
+						<td>
+							1. Spieler: <span class="input">___________________</span> &nbsp; Holz: <span class="input">________</span>
+						</td>
+						<td>
+							2. Spieler: <span class="input">___________________</span> &nbsp; Holz: <span class="input">________</span>
+						</td>
 					</tr>
 					<tr>
-						<td>3. Spieler: <span class="input">___________________</span> &nbsp; Holz: <span class="input">________</span></td>
-						<td>4. Spieler: <span class="input">___________________</span> &nbsp; Holz: <span class="input">________</span></td>
+						<td>
+							3. Spieler: <span class="input">___________________</span> &nbsp; Holz: <span class="input">________</span>
+						</td>
+						<td>
+							4. Spieler: <span class="input">___________________</span> &nbsp; Holz: <span class="input">________</span>
+						</td>
+					</tr>
+					<tr>
+						<td colspan="2">
+							Wie erreichen wir euch? (E-Mail/Telefon):
+							<span class="input">______________________________________________________</span>
+						</td>
 					</tr>
 				</table>
 			</header>
@@ -138,60 +152,60 @@
 
 			<footer>
 
-				<aside class="teamlist" v-if="haveTeamNames">
-					<nobr v-for="(team,i) in teams" :key="i">
-						<span class="teamnumber" v-if="i < 9">
-							&nbsp;{{ i+1 }}&nbsp;
-						</span>
-						<span class="teamnumber" v-else>
-							{{ i+1 }}
-						</span>
-						{{ team }}
-					</nobr>
-				</aside>
-
-				<!-- <table>
+				<table>
 					<tr>
-						<td>
+						<td class="rules">
 
-							<h5>Spielregeln</h5>
+							<h4>Spielregeln</h4>
 
-							<ul>
-								<li>
-									Spielfeld: Die zwei Hölzer stehen 15-18m voneinander entfernt. Wer nicht so weit werfen kann darf in Absprache mit den Gegnern ein paar Meter vortreten. Die Spieler werfen ihre Prackeln einer nach dem anderen, bis alle geworfen haben.
-								</li>
-								<li>
-									Anwurf: Pro Wurfrichtung wirft abwechselnd entweder das eine oder das andere Team an. Beide Team-Kapitäne werfen ihre Prackl und begeben sich zum anderen Holz, wo gemessen wird, welches Team die erste Nähe hat.
-								</li>
-								<li>
-									Nähe: Als Nähe bezeichnet man die Prackln des eigenen Teams, näher am Holz liegen, als die erste gegnerische Prackl. Sobald ein Team die Nähe hat muss das gegnerische Team werfen, bis dieses die Nähe erringt oder keine Prackln mehr hat. Pro Prackl in der Nähe werden 3 Rundenpunkte angerechnet.
-								</li>
-								<li>
-									Holz: Wird das Holz durch die Prackl berührt und zum Fall gebracht, so werden dem Team 6 Rundenpunkte angerechnet. Das Holz wird sofort in Richtung seines Ursprungsortes gekippt aufgestellt und nach dem Ende der Runde wieder dorthin zurückgebracht und befestigt.
-								</li>
-							</ul>
+							<dl>
+								<dt>
+									Spielfeld
+								</dt>
+								<dd>
+									Die zwei Hölzer stehen 15-18m voneinander entfernt. Wer nicht so weit werfen kann darf in Absprache mit den Gegnern weiter vor treten. Die Wurfrichtung wechselt mit jeder Runde. Während geworfen wird bitte warten und nicht über das Spielfeld laufen!
+								</dd>
+
+								<dt>
+									Anwurf
+								</dt>
+								<dd>
+									In der ersten Runde entscheidet der Zufall, welches Team anwirft. Danach wirft immer das in der Runde davor unterlegene Team an. Die Kapitäne Team beider Teams werfen ihre Prackl und begeben sich zum anderen Holz, wo sie nach jedem Wurf die Nähe bestimmen.
+								</dd>
+
+								<dt>
+									Nähe
+								</dt>
+								<dd>
+									Die Prackl die dem Holz am nächsten liegt entscheidet welches Team die Nähe hat. Es darf immer das jeweils andere Team werfen, bis sich die Nähe ändert oder alle Spieler geworfen haben. Jede Prackl in der Nähe vor der ersten Prackl des Gegners zählt <b>3 Punkte</b> für ihr Team.
+								</dd>
+
+								<dt>
+									Holz
+								</dt>
+								<dd>
+									Wird das Holz beim Wurf durch eine Prackl berührt und zum Fall gebracht, so erhält ihr Team <b>5 Punkte</b>. Das Holz wird in Richtung des Ursprungsortes gekippt aufgestellt. Nach dem Ende der Runde wird es zurückgebracht und befestigt. Bitte oben in der Namensliste Strichliste führen.
+								</dd>
+							</dl>
 
 						</td>
-						<td width="33%">
+						<td class="teamlist" v-if="haveTeamNames">
 
-							<table class="table-results">
-								<tr>
-									<td>Rundenpunkte</td>
-									<td></td>
-								</tr>
-								<tr>
-									<td>Spielpunkte</td>
-									<td></td>
-								</tr>
-								<tr>
-									<td>Rang im Turnier</td>
-									<td></td>
-								</tr>
-							</table>
+							<h4>Teams im Turnier</h4>
+
+							<nobr v-for="(team,i) in teams" :key="i">
+								<span class="teamnumber" v-if="i < 9">
+									&nbsp;{{ i+1 }}&nbsp;
+								</span>
+								<span class="teamnumber" v-else>
+									{{ i+1 }}
+								</span>
+								{{ team }}
+							</nobr>
 
 						</td>
 					</tr>
-				</table> -->
+				</table>
 
 			</footer>
 
@@ -301,7 +315,7 @@
 					for (let i = 1; i <= count; i++)
 						teams.push( noname ? '' : this.promptForTeamName(this.getDefaultTeamName(i)) );
 
-					return teams;
+					return teams.sort();
 				},
 
 			},
@@ -354,14 +368,13 @@
 			box-sizing: border-box;
 			width: 297mm;
 			height: 208mm;
-			padding: 10mm 14mm;
+			padding: 8mm 12mm;
 			background-color: white;
 
 			font-family: sans-serif;
-			font-size: 10pt;
+			font-size: 9pt;
 			font-weight: 500;
 		}
-
 		.sheet-a4 + .sheet-a4::before {
 			content: "";
 			display: block;
@@ -369,12 +382,12 @@
 			top: 0;
 			left: 0;
 			width: 100%;
-			height: 1mm;
+			height: 0.5mm;
 			background-color: #eee;
 		}
 
 		.playernames {
-			margin-bottom: 6mm;
+			margin-bottom: 5mm;
 			width: 66%;
 		}
 
@@ -394,12 +407,12 @@
 		header > h3 {
 			float: right;
 			font-weight: normal;
-			font-size: 1.8em;
+			font-size: 2em;
 		}
 		header > h3 > .teamnumber {
-			margin-left: 4mm;
+			margin-left: 0.2em;
 			vertical-align: sub;
-			font-size: 2em;
+			font-size: 1.66em;
 			line-height: 1;
 		}
 
@@ -483,18 +496,54 @@
 			font-weight: bold;
 		}
 
-		.teamlist {
+		footer {
 			margin-top: 4mm;
 			padding: 2mm;
-			border: 0.16em dashed #CCC;
-			line-height: 2;
 			background: #f8f8f8;
+			border: 0.16em dashed #CCC;
+			font-size: 0.8em;
+			line-height: 1.1;
 		}
-		.teamlist > nobr {
+		footer td {
+			vertical-align: top;
+		}
+		footer h4 {
+			margin-bottom: 0.5em;
+			line-height: 1;
+			font-size: 1.2em;
+		}
+
+		td.teamlist {
+			width: 30%;
+			padding-left: 2em;
+			line-height: 2;
+		}
+		td.teamlist > nobr {
 			display: inline-block;
-			margin-right: 3%;
-			width: 17%;
-			text-align: center;
+			margin-right: 1.5em;
+		}
+		td.teamlist > .teamnumber {
+			vertical-align: middle;
+		}
+
+		td.rules dl {
+			margin: 0;
+			padding: 0;
+		}
+		td.rules dl > dt {
+			float: left;
+			margin: 0;
+			padding: 0;
+			margin-right: 0.66em;
+			font-weight: bold;
+		}
+		td.rules dl > dd {
+			margin: 0;
+			padding: 0;
+			margin-bottom: 0.33em;
+		}
+		.rules dl > dd:last-child{
+			margin-bottom: 0;
 		}
 
 		@media print {
