@@ -163,28 +163,36 @@
 									Spielfeld
 								</dt>
 								<dd>
-									Die zwei Hölzer stehen 15-18m voneinander entfernt. Wer nicht so weit werfen kann darf in Absprache mit den Gegnern weiter vor treten. Die Wurfrichtung wechselt mit jeder Runde. Während geworfen wird bitte bei den Teams warten und nicht über das Spielfeld laufen!
+									Die zwei Hölzer stehen 15-18m voneinander entfernt. Entsprechende Markierungen sind auf dem Boden angebracht.
+									Die Wurfrichtung wechselt mit jeder Runde. Es wird jeweils {{ throws_half }} Mal hin und rück geworfen = {{ throws }} Würfe pro Spiel.
+									Während geworfen wird bitte bei den Teams warten und nicht über das Spielfeld laufen!
 								</dd>
 
 								<dt>
 									Anwurf
 								</dt>
 								<dd>
-									In der ersten Runde entscheidet der Zufall, welches Team anwirft. Danach wirft immer das in der Runde davor unterlegene Team an. Die Kapitäne beider Teams werfen ihre Prackl und begeben sich zum anderen Holz, wo sie nach jedem Wurf die Nähe bestimmen.
+									Zu Beginn jeder Runde werfen die beiden Team-Kapitäne ihre Prackl und begeben sich zum Ziel-Holz.
+									In der ersten Runde einigen sich die Teams, welcher Kapitän zuerst wirft. In den weiteren Runden beginnt der Kapitän des Teams, welches die Runde davor gewann.
+									Während einer Runde werfen immer die Spieler des Teams, welches gerade <b>nicht</b> die Nähe inne hat, bis diese sich ändert oder jeder geworfen hat.
 								</dd>
 
 								<dt>
 									Nähe
 								</dt>
 								<dd>
-									Die Prackl die dem Holz am nächsten liegt entscheidet welches Team die Nähe hat. Es darf immer das jeweils andere Team werfen, bis sich die Nähe ändert oder alle Spieler geworfen haben. Jede Prackl in der Nähe vor der ersten gegnerischen Prackl zählt <b>3 Punkte</b> für ihr Team.
+									Die Prackl die dem Holz am nächsten liegt verschafft ihrem Team die Nähe.
+									Jede Prackl, die sich am Ende der Runde in der Nähe befindet, also alle Prackln vor der ersten gegnerischen, zählen für ihr Team <b>3 Punkte</b>, maximal also 4×3 Punkte bei vier Prackln in der Nähe.
 								</dd>
 
 								<dt>
 									Holz
 								</dt>
 								<dd>
-									Wird das Holz beim Wurf durch eine Prackl berührt und zu Fall gebracht, dann erhält ihr Team <b>5 Punkte</b>. Das Holz wird in Richtung des Ursprungsortes gekippt aufgestellt. Nach dem Ende der Runde wird es zurückgebracht und standfest aufgestellt. Bitte oben in der Namensliste Strichliste führen.
+									Wird das Holz beim Wurf durch die Prackl berührt und zu Fall gebracht, dann erhält ihr Team zusätzlich <b>6 Punkte</b>.
+									Das Holz wird wo es nun liegt in Richtung des Ursprungsortes gekippt aufgestellt.
+									Nach dem Ende der Runde wird es zur Markierung zurückgebracht.
+									Bitte oben bei den Spielernamen eine Strichliste führen.
 								</dd>
 							</dl>
 
@@ -229,6 +237,7 @@
 			},
 
 			computed: {
+				throws_half: function(){ return Math.floor(this.throws/2) },
 				rounds: function(){ return (-1 + this.teams.length); },
 				haveTeamNames: function() { return this.teams.reduce((acc,team) => (acc && Boolean(team)), true); },
 			},
@@ -501,7 +510,7 @@
 			padding: 2mm;
 			background: #f8f8f8;
 			border: 0.16em dashed #CCC;
-			font-size: 0.8em;
+			font-size: 0.75em;
 			line-height: 1.1;
 		}
 		footer td {
