@@ -22,27 +22,25 @@
 					Prackl-Turnier {{ year }} in {{ location }}
 				</h1>
 
-				<table class="playernames">
+				<table class="playerinfo">
 					<tr>
 						<td>
-							1. Spieler: <span class="input">___________________</span> &nbsp; Holz: <span class="input">________</span>
+							Spieler 1: <span class="input">__________________</span> &nbsp; Holz: <span class="input">_______</span>
 						</td>
 						<td>
-							2. Spieler: <span class="input">___________________</span> &nbsp; Holz: <span class="input">________</span>
+							Spieler 2: <span class="input">__________________</span> &nbsp; Holz: <span class="input">_______</span>
+						</td>
+						<td rowspan="2">
+							Wie erreichen wir euch? (E-Mail/Telefon): <br /><br />
+							<span class="input">__________________________________________</span>
 						</td>
 					</tr>
 					<tr>
 						<td>
-							3. Spieler: <span class="input">___________________</span> &nbsp; Holz: <span class="input">________</span>
+							Spieler 3: <span class="input">__________________</span> &nbsp; Holz: <span class="input">_______</span>
 						</td>
 						<td>
-							4. Spieler: <span class="input">___________________</span> &nbsp; Holz: <span class="input">________</span>
-						</td>
-					</tr>
-					<tr>
-						<td colspan="2">
-							Wie erreichen wir euch? (E-Mail/Telefon):
-							<span class="input">______________________________________________________</span>
+							Spieler 4: <span class="input">__________________</span> &nbsp; Holz: <span class="input">_______</span>
 						</td>
 					</tr>
 				</table>
@@ -62,7 +60,7 @@
 											&nbsp;
 										</td>
 										<td width="9%" v-for="t in throws">
-											{{ t }} / {{ t % 2 ? 'Hin' : 'Rück' }}
+											{{ t }} ({{ t % 2 ? 'Hin' : 'Rück' }})
 										</td>
 									</tr>
 								</table>
@@ -192,7 +190,7 @@
 									Wird das Holz beim Wurf durch die Prackl berührt und zu Fall gebracht, dann erhält ihr Team zusätzlich <b>6 Punkte</b>.
 									Das Holz wird wo es nun liegt in Richtung des Ursprungsortes gekippt aufgestellt.
 									Nach dem Ende der Runde wird es zur Markierung zurückgebracht.
-									Bitte oben bei den Spielernamen eine Strichliste führen.
+									Bitte oben bei den Spielernamen eine Strichliste führen, wer wie viele Holz geschmissen hat.
 								</dd>
 							</dl>
 
@@ -293,8 +291,8 @@
 					let msg = prompt('Anzahl der Teams eingeben', '10').trim();
 					let int = parseInt(msg, 10);
 
-					if (int < 2 || int > 10) {
-						alert('Die Teamanzahl muss zwischen 2 und 10 liegen!');
+					if (int < 2 || int > 12) {
+						alert('Die Teamanzahl muss zwischen 2 und 12 liegen!');
 						return promptForTeamCount();
 					}
 
@@ -341,6 +339,10 @@
 	</script>
 
 	<style>
+
+		* {
+			box-sizing: border-box;
+		}
 
 		html, body {
 			display: block;
@@ -395,22 +397,24 @@
 			background-color: #eee;
 		}
 
-		.playernames {
+		.playerinfo {
 			margin-bottom: 5mm;
-			width: 66%;
+			width: 90%;
 		}
-
-		.playernames td {
-			height: 8mm;
+		.playerinfo td {
+			padding-top: 4mm;
+			padding-right: 6mm;
 			vertical-align: bottom;
 		}
 
+		.table-root {
+			height: 134mm; /* Tabelle soll immer gleichhoch sein, egal wie viele Teams. */
+		}
 		.table-root > tbody > tr:nth-child(odd) {
 			background-color: #f8f8f8;
 		}
-
 		.table-root > tbody > tr > td {
-			padding: 0.5mm 0;
+			padding: 0.25mm 0;
 		}
 
 		header > h3 {
@@ -462,9 +466,7 @@
 
 		.scores td {
 			width: 50%;
-			height: 12mm;
-
-			border: 1mm solid #666;
+			border: 1mm solid #555;
 		}
 		.scores td:last-child {
 			border-top-right-radius: 2mm;
@@ -505,23 +507,6 @@
 			font-weight: bold;
 		}
 
-		footer {
-			margin-top: 4mm;
-			padding: 2mm;
-			background: #f8f8f8;
-			border: 0.16em dashed #CCC;
-			font-size: 0.75em;
-			line-height: 1.1;
-		}
-		footer td {
-			vertical-align: top;
-		}
-		footer h4 {
-			margin-bottom: 0.5em;
-			line-height: 1;
-			font-size: 1.2em;
-		}
-
 		td.teamlist {
 			width: 30%;
 			padding-left: 2em;
@@ -535,18 +520,44 @@
 			vertical-align: middle;
 		}
 
-		td.rules dl {
+		footer {
+			position: relative;
+			margin-top: 4mm;
+			padding: 2mm;
+			background: #f8f8f8;
+			border: 0.16em dashed #CCC;
+			font-size: 0.75em;
+			line-height: 1.1;
+		}
+		footer td {
+			vertical-align: top;
+		}
+
+		.rules {
+			padding-left: 10mm;
+		}
+		.rules h4 {
+			float: left;
+			margin: 0;
+			margin-left: -10mm;
+			padding: 2mm;
+			writing-mode: sideways-lr;
+			line-height: 1;
+			font-size: 1.3em;
+			text-transform: uppercase;
+		}
+		.rules dl {
 			margin: 0;
 			padding: 0;
 		}
-		td.rules dl > dt {
+		.rules dl > dt {
 			float: left;
 			margin: 0;
 			padding: 0;
 			margin-right: 0.66em;
 			font-weight: bold;
 		}
-		td.rules dl > dd {
+		.rules dl > dd {
 			margin: 0;
 			padding: 0;
 			margin-bottom: 0.33em;
